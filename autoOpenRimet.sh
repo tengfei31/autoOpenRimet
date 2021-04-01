@@ -40,12 +40,18 @@ do
         continue
     fi
     #取奇数，拿到设备标识，偶数下标是设备的状态
-    if [ `expr $i % 2` -gt 0 ]
-    then
-        continue
-    fi
-    #处理每一个设备
-    device=${deviceArr[$i]}
+	if [ `expr $i % 2` == 0 ]
+	then
+		continue
+	fi
+	deviceStatus=${deviceArr[$i]}
+    device=${deviceArr[$i-1]}
+	echo "设备标识：${device}状态：${deviceStatus}"
+	if [ $deviceStatus != "device" ]
+	then
+		echo "设备状态不正确：${deviceStatus}, 已跳过"
+		continue
+	fi
     #fork子进程处理每一个设备
     (
         startApp $device "$packageName$pageName"
